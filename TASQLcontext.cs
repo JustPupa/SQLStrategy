@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Odbc;
 using System.Reflection;
-using System.Security.AccessControl;
 
 namespace SQLStrategyProject
 {
@@ -30,6 +30,10 @@ namespace SQLStrategyProject
         {
             rep.Remove<T>(instanceName, instance);
         }
+        public static void Update<T, I>(string instance, List<(string propSql, string valSql, SQLwhereOperations sqlOp)> whereConditions, List<(string, T)> valuesToUpd) where I : class
+        {
+            rep.Update<T, I>(instance, whereConditions, valuesToUpd);
+        }
     }
 
     public interface IRepository
@@ -37,6 +41,7 @@ namespace SQLStrategyProject
         public List<T> GetAll<T>(string instanceName) where T : new();
         public void Insert<T>(string instanceName, T instance) where T : class;
         public void Remove<T>(string instanceName, T instance) where T : class;
+        public void Update<T, I>(string instance, List<(string propSql, string valSql, SQLwhereOperations sqlOp)> whereConditions, List<(string, T)> valuesToUpd) where I : class;
     }
 
     public class TASQLRepository : IRepository
@@ -60,6 +65,38 @@ namespace SQLStrategyProject
         {
             (Database[instanceName] as DbSet<T>).Remove(instance);
             Database.SaveChanges();
+        }
+        public void Update<T, I>(string instance, List<(string propSql, string valSql, SQLwhereOperations sqlOp)> whereConditions, List<(string, T)> valuesToUpd) where I : class
+        {
+            var db = (Database[instance] as DbSet<I>);
+            IQueryable<I> filteredDb = db.AsQueryable();
+            //Фильтруем (базар)
+            {
+                foreach (var w in whereConditions)
+                {
+                    filteredDb = GetWhereResult(filteredDb, w.propSql, w.valSql, w.sqlOp);
+                }
+                IQueryable<I> GetWhereResult(IQueryable<I> objQuerry, string tableColname, string tableValue, SQLwhereOperations oper)
+                {
+                    var properties = typeof(I).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    foreach (var property in properties)
+                    {
+                        if (property.Name == tableColname && property.CanRead)
+                            return objQuerry.Where(q => property.GetValue(q, null).ToString() == tableValue);
+                    }
+                    return objQuerry;
+                }
+            }
+
+            //foreach (var v in valuesToUpd)
+            //{
+            //    filteredDb.ExecuteUpdate(f => f.SetProperty(i =>
+            //    {
+            //        Type myType = typeof(I);
+            //        PropertyInfo myPropInfo = myType.GetProperty(v.Item1);
+            //        myPropInfo.SetValue(i, v.Item2, null);
+            //    }));
+            //}
         }
     }
 
@@ -189,18 +226,23 @@ namespace SQLStrategyProject
                     .GetFields(bindingFlags)
                     .Select(field =>
                     {
-                        bool isDecimal = decimal.TryParse(field.GetValue(instance)?.ToString(), out decimal dec);
                         return field.GetValue(instance) == null ? "NULL" : "'" +
-                        (isDecimal ? dec.ToString().Replace(',', '.') : field.GetValue(instance).ToString()) + "'";
+                        field.GetValue(instance).ConvertSQLval() + "'";
                     })
                     .ToList();
             }
         }
-        private static List<string> GetFields<T>(T instance)
+        public void Update<T, I>(string instance, List<(string propSql, string valSql, SQLwhereOperations sqlOp)> whereConditions, List<(string, T)> valuesToUpd) where I : class
+        {
+            OdbcCommand DbCommand = DbConnection.CreateCommand();
+            string command = $"UPDATE {instance} SET {ConcatValuesForUpdate(valuesToUpd)} WHERE {GetWhereConditionStr(whereConditions)}";
+            DbCommand.CommandText = command;
+            DbCommand.ExecuteNonQuery();
+        }
+        private static List<string> GetFields<T>(T _)
         {
             return typeof(T)
                 .GetProperties()
-                //.Where(x => x.GetCustomAttribute<NotIncludedAsDbField>() == null)
                 .Select(x =>
                 {
                     var dbAttribute = x.GetCustomAttribute<System.ComponentModel.DataAnnotations.Schema.ColumnAttribute>();
@@ -208,6 +250,37 @@ namespace SQLStrategyProject
                 })
                 .Where(x => x != null)
                 .ToList();
+        }
+        private string ConcatValuesForUpdate<T>(List<(string, T)> valuesToUpd)
+        {
+            List<string> outputList = new();
+            foreach (var v in valuesToUpd)
+            {
+                outputList.Add(v.Item1 + " = " + "'" + v.Item2.ConvertSQLval() + "'");
+            }
+            return string.Join(", ", outputList);
+        }
+        private string GetWhereConditionStr(List<(string propSql, string valSql, SQLwhereOperations sqlOp)> whereConditions)
+        {
+            List<string> outputList = new();
+            foreach (var v in whereConditions)
+            {
+                outputList.Add(v.propSql + EnumOperToStr(v.sqlOp) + "'" + v.valSql + "'");
+            }
+            return string.Join(" and ", outputList);
+        }
+        private static string EnumOperToStr(SQLwhereOperations sqlOp)
+        {
+            switch(sqlOp)
+            {
+                case SQLwhereOperations.Equals: { return "="; }
+                case SQLwhereOperations.Less: { return "<"; }
+                case SQLwhereOperations.More: { return ">"; }
+                case SQLwhereOperations.StartsWith:
+                case SQLwhereOperations.EndsWith: { return "LIKE '%'"; }
+                case SQLwhereOperations.Contains: { return "LIKE '%%'"; }
+                default: return "";
+            }
         }
     }
 
@@ -842,6 +915,26 @@ namespace SQLStrategyProject
             }
             return revsNew;
         }
+        public static string ConvertSQLval<T>(this T value)
+        {
+            bool isDecimal = decimal.TryParse(value?.ToString(), out decimal dec);
+            bool isBool = bool.TryParse(value?.ToString(), out bool bo);
+            return isDecimal ? dec.ToString().Replace(',', '.') : (isBool? BoolParse(bo) : value.ToString());
+            string BoolParse(bool b)
+            {
+                return b ? "1" : "0";
+            }
+        }
+    }
+
+    public enum SQLwhereOperations
+    {
+        Equals,
+        More,
+        Less,
+        StartsWith,
+        EndsWith,
+        Contains
     }
 
     //public class NotIncludedAsDbField : ValidationAttribute
