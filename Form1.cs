@@ -12,7 +12,7 @@ namespace SQLStrategyProject
             //new TASQLRepository();     new ODBCRepository();
             Repo.SetStrategy(new ODBCRepository());
 
-            //ÏÐÎÂÅÐÊÀ SELECT * FROM [Table]
+            //SELECT * FROM [Table]
             {
                 var objectList = Repo.GetAll<User>("Users")?.ToList(); //4
                 var objectList2 = Repo.GetAll<Req>("Request")?.ToList(); //0
@@ -35,7 +35,6 @@ namespace SQLStrategyProject
                 var object3List5 = Repo.GetAll<CertRecordPunkt>("CertRecordPunkt")?.ToList(); //14
             }
 
-            //Ïðîñòî îáúåêòû
             User user1 = new()
             {
                 Login = "3",
@@ -186,7 +185,7 @@ namespace SQLStrategyProject
             /// <summary>
             ///  DO NOT REMOVE (!) - all data can be useful in many situations
             /// </summary>
-            //INSERT command check
+            //INSERT
             {
                 Repo.Insert("Users", user1);
                 //Repo.Insert("Request", req1);
@@ -228,7 +227,7 @@ namespace SQLStrategyProject
                 //Repo.Remove("CertificateShort", cshort1);
             }
 
-            //UPDATE command check
+            //UPDATE
             {
                 List<(string, string, SQLwhereOperations)> whereState = new()
                 {
@@ -240,7 +239,7 @@ namespace SQLStrategyProject
                 Repo.Update<object, BSOAktRecord>("BSOAktRecord", whereState, valsUpd);
             }
 
-            //SELECT TOP 1 command check
+            //SELECT TOP 1
             {
                List<(string, string, SQLwhereOperations)> whereState = new()
                 {
