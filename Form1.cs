@@ -1,195 +1,194 @@
 namespace SQLStrategyProject
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void MainButton_Click(object sender, EventArgs e)
         {
-            /**
-             * ЗДЕСЬ ПРОИСХОДИТ МАГИЯ ВНЕ ХОГВАРТСА
-             * */
-
-            //new TASQLRepository();    ИЛИ     new ODBCRepository();
+            //new TASQLRepository();     new ODBCRepository();
             Repo.SetStrategy(new ODBCRepository());
-            
+
             //ПРОВЕРКА SELECT * FROM [Table]
             {
-                //var objectList = Repo.GetAll<User>("Users").ToList(); //4
-                //var objectList2 = Repo.GetAll<Req>("Request").ToList(); //0
-                //var objectList3 = Repo.GetAll<Year_Plan>("Year_Plan").ToList(); //34
-                //var objectList4 = Repo.GetAll<Revisor>("Revisors").ToList(); //181
-                //var objectList5 = Repo.GetAll<RegionYp>("RegionsYP").ToList(); //6
-                //var objectList6 = Repo.GetAll<VneplanRecord>("Vneplans").ToList(); //1
+                var objectList = Repo.GetAll<User>("Users")?.ToList(); //4
+                var objectList2 = Repo.GetAll<Req>("Request")?.ToList(); //0
+                var objectList3 = Repo.GetAll<Year_Plan>("Year_Plan")?.ToList(); //34
+                var objectList4 = Repo.GetAll<Revisor>("Revisors")?.ToList(); //181
+                var objectList5 = Repo.GetAll<RegionYp>("RegionsYP")?.ToList(); //6
+                var objectList6 = Repo.GetAll<VneplanRecord>("Vneplans")?.ToList(); //1
 
-                //var object2List = Repo.GetAll<CashAktRecord>("CashAktRecord").ToList(); //16
-                //var object2List2 = Repo.GetAll<BSOAktRecord>("BSOAktRecord").ToList(); //16
-                //var object2List3 = Repo.GetAll<AdvanceAktRecord>("AdvanceAktRecord").ToList(); //0
-                //var object2List4 = Repo.GetAll<TreeOper>("TreeOper").ToList(); //149
-                //var object2List5 = Repo.GetAll<TreePosl>("TreePosl").ToList(); //122
-                //var object2List6 = Repo.GetAll<IdsOper>("IdsOper").ToList(); //119
+                var object2List = Repo.GetAll<CashAktRecord>("CashAktRecord")?.ToList(); //16
+                var object2List2 = Repo.GetAll<BSOAktRecord>("BSOAktRecord")?.ToList(); //16
+                var object2List3 = Repo.GetAll<AdvanceAktRecord>("AdvanceAktRecord")?.ToList(); //0
+                var object2List4 = Repo.GetAll<TreeOper>("TreeOper")?.ToList(); //149
+                var object2List5 = Repo.GetAll<TreePosl>("TreePosl")?.ToList(); //122
+                var object2List6 = Repo.GetAll<IdsOper>("IdsOper")?.ToList(); //119
 
-                //var object3List = Repo.GetAll<IdsPosl>("IdsPosl").ToList(); //117
-                //var object3List2 = Repo.GetAll<CertificateShort>("CertificateShort").ToList(); //3
-                //var object3List3 = Repo.GetAll<CertificRecord>("CertificRecord").ToList(); //5
-                //var object3List4 = Repo.GetAll<CertificRecordRev>("CertificRecordRev").ToList(); //4
-                //var object3List5 = Repo.GetAll<CertRecordPunkt>("CertRecordPunkt").ToList(); //14
+                var object3List = Repo.GetAll<IdsPosl>("IdsPosl")?.ToList(); //117
+                var object3List2 = Repo.GetAll<CertificateShort>("CertificateShort")?.ToList(); //3
+                var object3List3 = Repo.GetAll<CertificRecord>("CertificRecord")?.ToList(); //5
+                var object3List4 = Repo.GetAll<CertificRecordRev>("CertificRecordRev")?.ToList(); //4
+                var object3List5 = Repo.GetAll<CertRecordPunkt>("CertRecordPunkt")?.ToList(); //14
             }
 
             //Просто объекты
-            //User user1 = new()
-            //{
-            //    Login = "3",
-            //    Password = "3",
-            //    Role = 1,
-            //    ObjName = "Глусский УПС",
-            //    Email = "3@mail.ru"
-            //};
-            //Req req1 = new()
-            //{
-            //    Login = "4",
-            //    Password = "4",
-            //    Role = 1,
-            //    ObjName = "Глусский УПС",
-            //    Email = "3@mail.ru"
-            //};
-            //Year_Plan yp = new()
-            //{
-            //    Ops_name = "Доколлллль",
-            //    Srok_doc_1 = "Январь",
-            //    Srok_doc_2 = "Март",
-            //    Date_doc = new DateTime(2023, 1, 4),
-            //    Date_doc_2 = new DateTime(2023, 3, 5),
-            //    Srok_oper = "Май",
-            //    Date_oper = new DateTime(2023, 5, 23),
-            //    Srok_posl_1 = "Июнь",
-            //    Srok_posl_2 = "Август",
-            //    Date_posl = new DateTime(2023, 6, 15),
-            //    Date_posl_2 = new DateTime(2023, 8, 9),
-            //    Year = 2023,
-            //    Serial = 99999,
-            //    Region = "Глусский УПС"
-            //};
-            //Revisor rev1 = new()
-            //{
-            //    ID = 9999,
-            //    Ops = "Доколь",
-            //    Job_title = "jj",
-            //    Rev_Type_Num = 2,
-            //    Year = 2023,
-            //    IsSecondMonth = false
-            //};
-            //RegionYp reg1 = new()
-            //{
-            //    Region = "testreg",
-            //    Year = 2024
-            //};
-            //VneplanRecord vnep1 = new()
-            //{
-            //    Ops_name = "Доколь",
-            //    Year = 2023,
-            //    Akt = "AKKKKT",
-            //    Date = new DateTime(2023, 12, 5),
-            //    Reason = "just cause"
-            //};
-            //CashAktRecord cash1 = new()
-            //{
-            //    Ops_name = "Доколь",
-            //    Date = new DateTime(2023, 12, 7),
-            //    InFact = false,
-            //    Remaining = (decimal?)15.6,
-            //    Chancellery = (decimal?)17.24,
-            //    Periodic = (decimal?)84.12,
-            //    Retail = (decimal?)43.8,
-            //    AktTypeId = 2,
-            //    PROVERKA = 3
-            //};
-            //BSOAktRecord bso1 = new()
-            //{
-            //    AktTypeId = 2,
-            //    PROVERKA = 3,
-            //    Date = new DateTime(2023, 9, 11),
-            //    InFact = false,
-            //    Ops_name = "Доколь",
-            //    Calendar = 54.2m,
-            //    Stamp = 12.33m,
-            //    Package = 0
-            //};
-            //AdvanceAktRecord adv1 = new()
-            //{
-            //    AktTypeId = 2,
-            //    PROVERKA = 3,
-            //    Date = new DateTime(2023, 5, 3),
-            //    FIO = "F IIIII OO",
-            //    InFact = false,
-            //    JobTitle = "jjO-b",
-            //    Ops_name = "Березовка",
-            //    Marks = 17.37m,
-            //    Goods = 11.95m
-            //};
-            //IdsOper idso1 = new()
-            //{
-            //    Id = "9999",
-            //    Content = "testNode",
-            //    Include = false
-            //};
-            //TreeOper trop1 = new()
-            //{
-            //    ParentNode = "ROOT",
-            //    ChildNode = "9999"
-            //};
-            //IdsPosl idsp1 = new()
-            //{
-            //    Id = "9999",
-            //    Content = "testNode",
-            //    Include = false
-            //};
-            //TreePosl trpo1 = new()
-            //{
-            //    ParentNode = "ROOT",
-            //    ChildNode = "9999"
-            //};
-            //CertificateShort cshort1 = new()
-            //{
-            //    Ops_name = "Доколь",
-            //    Date = new DateTime(2023, 12, 1),
-            //    PROVERKA = 3,
-            //    Period1 = new DateTime(2023, 12, 2),
-            //    Period2 = new DateTime(2023, 12, 4),
-            //    ToFio = "FF",
-            //    ToJob = "JJ",
-            //    VyvodPosl = "vyvod takoi vyvod"
-            //};
-            //CertificRecord crec1 = new()
-            //{
-            //    Id = 777,
-            //    Inspected = "ins",
-            //    Cons = "cocons",
-            //    Ops_name = "Доколь",
-            //    Date = new DateTime(2023, 12, 1),
-            //    PROVERKA = 3
-            //};
-            //CertificRecordRev crecrev1 = new()
-            //{
-            //    Id = 888,
-            //    JobTitle = "inspuk",
-            //    FIO = "josh hutchinson",
-            //    RecordID = 777
-            //};
-            //CertRecordPunkt crecpunk1 = new()
-            //{
-            //    Id = 4444,
-            //    Content = "phub",
-            //    RecordId = 777,
-            //    IsThirdLvl = true
-            //};
-
-            //ПРОВЕРКА INSERT INTO [Table]
+            User user1 = new()
             {
-                //Repo.Insert("Users", user1);
+                Login = "3",
+                Password = "3",
+                Role = 1,
+                ObjectName = "Глусский УПС",
+                Email = "3@mail.ru"
+            };
+            Req req1 = new()
+            {
+                Login = "4",
+                Password = "4",
+                Role = 1,
+                ObjName = "Глусский УПС",
+                Email = "3@mail.ru"
+            };
+            Year_Plan yp = new()
+            {
+                Ops_name = "Доколлллль",
+                Srok_doc_1 = "Январь",
+                Srok_doc_2 = "Март",
+                Date_doc = new DateTime(2023, 1, 4),
+                Date_doc_2 = new DateTime(2023, 3, 5),
+                Srok_oper = "Май",
+                Date_oper = new DateTime(2023, 5, 23),
+                Srok_posl_1 = "Июнь",
+                Srok_posl_2 = "Август",
+                Date_posl = new DateTime(2023, 6, 15),
+                Date_posl_2 = new DateTime(2023, 8, 9),
+                Year = 2023,
+                Serial = 99999,
+                Region = "Глусский УПС"
+            };
+            Revisor rev1 = new()
+            {
+                ID = 9999,
+                Ops = "Доколь",
+                Job_title = "jj",
+                Rev_Type_Num = 2,
+                Year = 2023,
+                IsSecondMonth = false
+            };
+            RegionYp reg1 = new()
+            {
+                Region = "testreg",
+                Year = 2024
+            };
+            VneplanRecord vnep1 = new()
+            {
+                Ops_name = "Доколь",
+                Year = 2023,
+                Akt = "AKKKKT",
+                Date = new DateTime(2023, 12, 5),
+                Reason = "just cause"
+            };
+            CashAktRecord cash1 = new()
+            {
+                Ops_name = "Доколь",
+                Date = new DateTime(2023, 12, 7),
+                InFact = false,
+                Remaining = (decimal?)15.6,
+                Chancellery = (decimal?)17.24,
+                Periodic = (decimal?)84.12,
+                Retail = (decimal?)43.8,
+                AktTypeId = 2,
+                PROVERKA = 3
+            };
+            BSOAktRecord bso1 = new()
+            {
+                AktTypeId = 2,
+                PROVERKA = 3,
+                Date = new DateTime(2023, 9, 11),
+                InFact = false,
+                Ops_name = "Доколь",
+                Calendar = 54.2m,
+                Stamp = 12.33m,
+                Package = 0
+            };
+            AdvanceAktRecord adv1 = new()
+            {
+                AktTypeId = 2,
+                PROVERKA = 3,
+                Date = new DateTime(2023, 5, 3),
+                FIO = "F IIIII OO",
+                InFact = false,
+                JobTitle = "jjO-b",
+                Ops_name = "Березовка",
+                Marks = 17.37m,
+                Goods = 11.95m
+            };
+            IdsOper idso1 = new()
+            {
+                Id = "9999",
+                Content = "testNode",
+                Include = false
+            };
+            TreeOper trop1 = new()
+            {
+                ParentNode = "ROOT",
+                ChildNode = "9999"
+            };
+            IdsPosl idsp1 = new()
+            {
+                Id = "9999",
+                Content = "testNode",
+                Include = false
+            };
+            TreePosl trpo1 = new()
+            {
+                ParentNode = "ROOT",
+                ChildNode = "9999"
+            };
+            CertificateShort cshort1 = new()
+            {
+                Ops_name = "Доколь",
+                Date = new DateTime(2023, 12, 1),
+                PROVERKA = 3,
+                Period1 = new DateTime(2023, 12, 2),
+                Period2 = new DateTime(2023, 12, 4),
+                ToFio = "FF",
+                ToJob = "JJ",
+                VyvodPosl = "vyvod takoi vyvod"
+            };
+            CertificRecord crec1 = new()
+            {
+                Id = 777,
+                Inspected = "ins",
+                Cons = "cocons",
+                Ops_name = "Доколь",
+                Date = new DateTime(2023, 12, 1),
+                PROVERKA = 3
+            };
+            CertificRecordRev crecrev1 = new()
+            {
+                Id = 888,
+                JobTitle = "inspuk",
+                FIO = "josh hutchinson",
+                RecordID = 777
+            };
+            CertRecordPunkt crecpunk1 = new()
+            {
+                Id = 4444,
+                Content = "phub",
+                RecordId = 777,
+                IsThirdLvl = true
+            };
+
+            /// <summary>
+            ///  DO NOT REMOVE (!) - all data can be useful in many situations
+            /// </summary>
+            //INSERT command check
+            {
+                Repo.Insert("Users", user1);
                 //Repo.Insert("Request", req1);
                 //Repo.Insert("Year_Plan", yp);
                 //Repo.Insert("Revisors", rev1);
@@ -210,7 +209,7 @@ namespace SQLStrategyProject
 
             //ПРОВЕРКА DELETE FROM [Table]
             {
-                //Repo.Remove("Users", user1);
+                Repo.Remove("Users", user1);
                 //Repo.Remove("Request", req1);
                 //Repo.Remove("Year_Plan", yp);
                 //Repo.Remove("Revisors", rev1);
@@ -229,16 +228,25 @@ namespace SQLStrategyProject
                 //Repo.Remove("CertificateShort", cshort1);
             }
 
-            //Проверка Update
+            //UPDATE command check
             {
                 List<(string, string, SQLwhereOperations)> whereState = new()
                 {
                     ("Ops_name", "ОПС №5 г. Горки", SQLwhereOperations.Equals),
                     ("InFact", "0", SQLwhereOperations.Equals),
-                    ("AktTypeId", "1", SQLwhereOperations.Equals)
+                    ("AktTypeId", "2", SQLwhereOperations.Equals)
                 };
-                List<(string, object)> valsUpd = new() { ("Stamp", 13.82) };
+                List<(string, object)> valsUpd = new() { ("Calendar", 4.75m) };
                 Repo.Update<object, BSOAktRecord>("BSOAktRecord", whereState, valsUpd);
+            }
+
+            //SELECT TOP 1 command check
+            {
+               List<(string, string, SQLwhereOperations)> whereState = new()
+                {
+                    ("Login", "3", SQLwhereOperations.Equals)
+                };
+                User? u1 = Repo.GetSingle<User>("Users", whereState);
             }
         }
     }
